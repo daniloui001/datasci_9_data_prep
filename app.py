@@ -313,3 +313,22 @@ exp = explainer.explain_instance(X_val, xgboost.predict_proba, num_features=9)
 exp.save_to_file('observation_2.html')
 
 pickle.dump(xgboost, open(ID2, 'xgboost_100k.sav', 'wb'))
+
+
+### compute
+
+
+loaded_model = pickle.load(open('ID3', 'rb'))
+
+loaded_scaler = pickle.load(open('ID4', 'rb'))
+
+## now lets create a new dataframe with the same column names and values
+df_test = pd.DataFrame(columns=['FIPS', 'enthusiast_est', 'enthusiast_se', 'audience_est',
+       'audience_se', 'no_outreach_est', 'no_outreach_se'],)
+df_test.loc[0] = [0, 23, 32, 3, 0, 50, 0, 0, 0]
+df_test_scaled = loaded_scaler.transform(df_test)
+
+
+y_test_pred = loaded_model.predict(df_test_scaled)
+
+print(y_test_pred[0])
